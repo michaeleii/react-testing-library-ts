@@ -3,8 +3,6 @@ import Banner from "./components/Banner/Banner";
 import FollowersPage from "./pages/FollowerPage";
 import TodoPage from "./pages/TodoPage";
 import {
-	Route,
-	Routes,
 	createBrowserRouter,
 	RouteObject,
 	RouterProvider,
