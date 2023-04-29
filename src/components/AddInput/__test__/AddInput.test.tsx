@@ -1,7 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import AddInput from "../AddInput";
+import { vi } from "vitest";
 
-const mockedSetTodo = jest.fn();
+const mockedSetTodo = vi.fn();
 
 describe("AddInput", () => {
 	it("should render input element", () => {

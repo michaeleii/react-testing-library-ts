@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import FollowersList from "../FollowersList";
+import { vi } from "vitest";
 
 const MockFollowersList = () => {
 	return (
@@ -13,7 +14,7 @@ const MockFollowersList = () => {
 describe("FollowersList", () => {
 	beforeEach(() => {
 		// console.log("RUNS BEFORE EACH TEST")
-		jest.mock("../../../__mocks__/axios");
+		vi.mock("../../../__mocks__/axios");
 	});
 
 	// beforeAll(() => {

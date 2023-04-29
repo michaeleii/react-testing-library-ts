@@ -2,7 +2,9 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
-import fetchMock from "jest-fetch-mock";
+import "@testing-library/jest-dom";
+import createFetchMock from "vitest-fetch-mock";
+import { vi } from "vitest";
 
-fetchMock.enableMocks()
+const fetchMock = createFetchMock(vi);
+fetchMock.enableMocks();
