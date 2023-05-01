@@ -1,8 +1,10 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import AddInput from "../AddInput";
 import { vi } from "vitest";
 
 const mockedSetTodo = vi.fn();
+const user = userEvent.setup();
 
 describe("AddInput", () => {
 	it("should render input element", () => {
@@ -11,40 +13,32 @@ describe("AddInput", () => {
 		expect(inputElement).toBeInTheDocument();
 	});
 
-	it("should be able to type into input", () => {
+	it("should be able to type into input", async () => {
 		render(<AddInput todos={[]} setTodos={mockedSetTodo} />);
 		const inputElement = screen.getByPlaceholderText(
 			/Add a new task here.../i
 		) as HTMLInputElement;
-		fireEvent.click(inputElement);
-		fireEvent.change(inputElement, {
-			target: { value: "Go Grocery Shopping" },
-		});
+		await user.type(inputElement, "Go Grocery Shopping");
 		expect(inputElement.value).toBe("Go Grocery Shopping");
 	});
 
-	it("should be able to type into input", () => {
+	it("should be able to type into input", async () => {
 		render(<AddInput todos={[]} setTodos={mockedSetTodo} />);
 		const inputElement = screen.getByPlaceholderText(/Add a new task here.../i);
-		fireEvent.click(inputElement);
-		fireEvent.change(inputElement, {
-			target: { value: "Go Grocery Shopping" },
-		});
+		await user.type(inputElement, "Go Grocery Shopping");
 		const buttonElement = screen.getByRole("button", { name: /Add/i });
-		fireEvent.click(buttonElement);
+		await user.click(buttonElement);
 		expect(mockedSetTodo).toBeCalled();
 	});
 
-	it("should have empty input when add button is cliked", () => {
+	it("should have empty input when add button is cliked", async () => {
 		render(<AddInput todos={[]} setTodos={mockedSetTodo} />);
 		const inputElement = screen.getByPlaceholderText(
 			/Add a new task here.../i
 		) as HTMLInputElement;
-		fireEvent.change(inputElement, {
-			target: { value: "Go Grocery Shopping" },
-		});
+		await user.type(inputElement, "Go Grocery Shopping");
 		const buttonElement = screen.getByRole("button", { name: /Add/i });
-		fireEvent.click(buttonElement);
+		await user.click(buttonElement);
 		expect(inputElement.value).toBe("");
 	});
 });
