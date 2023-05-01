@@ -4,7 +4,6 @@ import AddInput from "../AddInput";
 import { vi } from "vitest";
 
 const mockedSetTodo = vi.fn();
-const user = userEvent.setup();
 
 describe("AddInput", () => {
 	it("should render input element", () => {
@@ -18,16 +17,16 @@ describe("AddInput", () => {
 		const inputElement = screen.getByPlaceholderText(
 			/Add a new task here.../i
 		) as HTMLInputElement;
-		await user.type(inputElement, "Go Grocery Shopping");
+		await userEvent.type(inputElement, "Go Grocery Shopping");
 		expect(inputElement.value).toBe("Go Grocery Shopping");
 	});
 
 	it("should be able to type into input", async () => {
 		render(<AddInput todos={[]} setTodos={mockedSetTodo} />);
 		const inputElement = screen.getByPlaceholderText(/Add a new task here.../i);
-		await user.type(inputElement, "Go Grocery Shopping");
+		await userEvent.type(inputElement, "Go Grocery Shopping");
 		const buttonElement = screen.getByRole("button", { name: /Add/i });
-		await user.click(buttonElement);
+		await userEvent.click(buttonElement);
 		expect(mockedSetTodo).toBeCalled();
 	});
 
@@ -36,9 +35,9 @@ describe("AddInput", () => {
 		const inputElement = screen.getByPlaceholderText(
 			/Add a new task here.../i
 		) as HTMLInputElement;
-		await user.type(inputElement, "Go Grocery Shopping");
+		await userEvent.type(inputElement, "Go Grocery Shopping");
 		const buttonElement = screen.getByRole("button", { name: /Add/i });
-		await user.click(buttonElement);
+		await userEvent.click(buttonElement);
 		expect(inputElement.value).toBe("");
 	});
 });

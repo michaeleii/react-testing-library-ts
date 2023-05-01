@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Todo from "../Todo";
 import { BrowserRouter } from "react-router-dom";
 
@@ -10,25 +11,25 @@ const MockTodo = () => {
 	);
 };
 
-const addTask = (tasks: string[]) => {
+const addTask = async (tasks: string[]) => {
 	const inputElement = screen.getByPlaceholderText(/Add a new task here.../i);
 	const buttonElement = screen.getByRole("button", { name: /Add/i });
-	tasks.forEach((task) => {
-		fireEvent.change(inputElement, { target: { value: task } });
-		fireEvent.click(buttonElement);
-	});
+	for await (const task of tasks) {
+		await userEvent.type(inputElement, task);
+		await userEvent.click(buttonElement);
+	}
 };
 
-it("should be able to type into input", () => {
+it("should be able to type into input", async () => {
 	render(<MockTodo />);
-	addTask(["Go Grocery Shopping"]);
+	await addTask(["Go Grocery Shopping"]);
 	const divElement = screen.getByText(/Go Grocery Shopping/i);
 	expect(divElement).toBeInTheDocument();
 });
 
-it("should render multiple items", () => {
+it("should render multiple items", async () => {
 	render(<MockTodo />);
-	addTask([
+	await addTask([
 		"Go Grocery Shopping",
 		"Go Grocery Shopping",
 		"Go Grocery Shopping",
@@ -37,17 +38,17 @@ it("should render multiple items", () => {
 	expect(divElements.length).toBe(3);
 });
 
-it("task should not have complete class when initally rendered", () => {
+it("task should not have complete class when initally rendered", async () => {
 	render(<MockTodo />);
-	addTask(["Go Grocery Shopping"]);
+	await addTask(["Go Grocery Shopping"]);
 	const divElement = screen.getByText(/Go Grocery Shopping/i);
 	expect(divElement).not.toHaveClass("todo-item-active");
 });
 
-it("task should have complete class when clicked", () => {
+it("task should have complete class when clicked", async () => {
 	render(<MockTodo />);
-	addTask(["Go Grocery Shopping"]);
+	await addTask(["Go Grocery Shopping"]);
 	const divElement = screen.getByText(/Go Grocery Shopping/i);
-	fireEvent.click(divElement);
+	await userEvent.click(divElement);
 	expect(divElement).toHaveClass("todo-item-active");
 });
